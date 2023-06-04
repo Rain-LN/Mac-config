@@ -1,0 +1,179 @@
+#!/usr/bin/env sh
+
+#
+# for this to work you must configure sudo such that
+# it will be able to run the command without password
+#
+# see this wiki page for information:
+#  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#configure-scripting-addition
+#
+# yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+# sudo yabai --load-sa
+#
+
+# global settings
+
+# 在多显示器的情况下新建窗口时，新建的窗口出现位置
+# - default: 默认在创建窗口的显示器出现
+# - focused: 在当前焦点窗口的显示器出现
+# - cursor: 在鼠标所在的显示器出现
+yabai -m config window_origin_display default
+
+# 当前屏幕下，新窗口出现的位置
+# - first_child: 在当前屏幕的窗口的左边(vertical split)或上边(horizontal split)
+# - second_child: 在当前屏幕的窗口的右边(vertical split)或下边(horizontal split)
+yabai -m config window_placement second_child
+
+# 浮动窗口是否置顶(on/off)
+yabai -m config window_topmost off
+
+# 窗口阴影
+# - on: 开启窗口阴影
+# - off: 关闭窗口阴影
+# - float: 仅浮动窗口开启阴影
+yabai -m config window_shadow on
+
+# 窗口不透明度(on/off)
+yabai -m config window_opacity off
+# 激活窗口的不透明度(仅当window_opacity为on时有效)
+yabai -m config active_window_opacity 1.0
+# 非激活窗口的不透明度(仅当window_opacity为on时有效)
+yabai -m config normal_window_opacity 0.90
+# 激活窗口和非激活窗口不透明度过渡时长(单位: 秒, 仅当window_opacity为on时有效)
+yabai -m config window_opacity_duration 0.0
+
+# 窗口边框(on/off)
+yabai -m config window_border off
+# 窗口边框宽度(单位: 像素, 仅当window_border为on时有效)
+yabai -m config window_border_width 4
+# 窗口边框圆角(单位: 像素, 仅当window_border为on时有效)
+yabai -m config window_border_radius 12
+# 窗口边框模糊(on/off, 仅当window_border为on时有效)
+yabai -m config window_border_blur off
+# 窗口边框高分屏(on/off, 仅当window_border为on时有效)
+yabai -m config window_border_hidpi on
+# 激活窗口边框颜色(仅当window_border为on时有效)
+yabai -m config active_window_border_color 0xff775759
+# 非激活窗口边框颜色(仅当window_border为on时有效)
+yabai -m config normal_window_border_color 0xff555555
+# 设置窗口 --insert 消息选择的颜色
+yabai -m config insert_feedback_color 0xffd75f5f
+
+# 窗口的比例(on/off)
+yabai -m config auto_balance off
+# 窗口的比例(仅当auto_balance为off时有效)
+yabai -m config split_ratio 0.50
+
+# 窗口切换时，鼠标自动跟随当前使用窗口(on/off)
+yabai -m config mouse_follows_focus off
+
+# 是否聚焦到鼠标所在的窗口
+# - off: 关闭
+# - autoraise: 自动跟随不升起
+# - autofocus: 自动跟随并升起像鼠标点击了一样
+yabai -m config focus_follows_mouse off
+
+# 按住对应修饰键时，yabai 不自动调整平铺（默认情况下调整窗口大小时，yabai 会自适应调整平铺）；配置时通常会关闭 focus_follows_mouse
+# - cmd
+# - alt
+# - shift
+# - ctrl
+# - fn
+yabai -m config mouse_modifier               fn
+# modifier + 左键的行为
+# - move
+# - resize
+yabai -m config mouse_action1                move
+# modifier + 右键的行为
+# - move
+# - resize
+yabai -m config mouse_action2                resize
+
+# 在平铺管理情况下，拖动一个窗口到另一窗口位置时的操作
+# - swap: 交换窗口位置
+# - stack: 堆叠在旧窗口上
+yabai -m config mouse_drop_action            swap
+
+# 布局模式
+# - bsp: 平铺
+# - stack: 堆叠
+# - float: 浮动
+yabai -m config layout                       bsp
+
+# 窗口和屏幕边缘的距离（优先级低于 gap）
+yabai -m config top_padding                  08
+yabai -m config bottom_padding               08
+yabai -m config left_padding                 08
+yabai -m config right_padding                08
+
+# 窗口与窗口之间的间距（优先级高于 padding）
+yabai -m config window_gap                   02
+
+
+# ----------------------------------for window---------------------------------------
+# manage: 是否使用 yabai 管理
+# - on
+# - off
+# sticky: 是否总是置顶
+# - on
+# - off
+# layer:
+# - below
+# - normal
+# - above
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^System Information$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Activity Monitor$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Finder$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Alfred Preferences$" sticky=on layer=above manage=off
+yabai -m rule --add app="^飞书$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Feishu$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Lark$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Lark Meetings$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Magnet$" manage=off
+yabai -m rule --add app="^WeChat$" manage=off
+yabai -m rule --add app="^微信$" manage=off
+
+
+
+# yabai -m config                                 \
+#     mouse_follows_focus          off            \
+#     focus_follows_mouse          off            \ 
+#     window_origin_display        default        \
+#     window_placement             second_child   \
+#     window_zoom_persist          on             \
+#     window_topmost               off            \
+#     window_shadow                on             \
+#     window_animation_duration    0.0            \
+#     window_animation_frame_rate  120            \
+#     window_opacity_duration      0.0            \
+#     active_window_opacity        1.0            \
+#     normal_window_opacity        0.90           \
+#     window_opacity               off            \
+#     insert_feedback_color        0xffd75f5f     \
+#     active_window_border_color   0xff775759     \
+#     normal_window_border_color   0xff555555     \
+#     window_border_width          4              \
+#     window_border_radius         12             \
+#     window_border_blur           off            \
+#     window_border_hidpi          on             \
+#     window_border                off            \
+#     split_ratio                  0.50           \
+#     split_type                   auto           \
+#     auto_balance                 off            \
+#     top_padding                  12             \
+#     bottom_padding               12             \
+#     left_padding                 12             \
+#     right_padding                12             \
+#     window_gap                   06             \
+#     layout                       bsp            \
+#     mouse_modifier               fn             \
+#     mouse_action1                move           \
+#     mouse_action2                resize         \
+#     mouse_drop_action            swap
+
+
+
+
+
+echo "yabai configuration loaded.."
